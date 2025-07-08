@@ -1,7 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
-import { FcGoogle } from "react-icons/fc";
 
 export default function Login({ setUser }) {
   const adminEmails = ["admin@gmail.com", "chaitanyabajaj42@gmail.com"];
@@ -24,13 +23,18 @@ export default function Login({ setUser }) {
     }
   };
 
+  const isLocalhost = window.location.hostname === "localhost";
+  const redirectUri = isLocalhost
+    ? "http://localhost:5173" // or 3000 if using CRA
+    : "https://neighborfit-4bh2bpjam-chaitanya-bajajs-projects.vercel.app";
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600 p-4">
-      <div className="bg-white text-gray-800 p-8 rounded-3xl shadow-2xl space-y-8 w-full max-w-sm animate-fadeIn">
+      <div className="bg-white text-gray-800 p-8 rounded-2xl shadow-2xl space-y-6 w-full max-w-sm">
         <h2 className="text-3xl font-bold text-center text-purple-700">
-          NeighborFit
+          Login to NeighborFit
         </h2>
-        <p className="text-center text-gray-600">
+        <p className="text-center text-gray-600 mb-6">
           Sign in with your Google account to continue
         </p>
 
@@ -38,16 +42,16 @@ export default function Login({ setUser }) {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => toast.error("Google Sign-In Failed")}
-            size="large"
-            shape="pill"
-            theme="outline"
+            useOneTap
+            ux_mode="popup"
+            // optional if you want to explicitly control redirect behavior:
+            // redirectUri={redirectUri}
           />
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-gray-500 justify-center">
-          <FcGoogle size={16} />
-          <span>Admin access is granted based on verified email.</span>
-        </div>
+        <p className="text-xs text-center text-gray-500 mt-6">
+          Admin access is granted based on verified email.
+        </p>
       </div>
     </div>
   );
